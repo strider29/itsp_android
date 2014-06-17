@@ -5,6 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="scan_new">Scan new code</string>
     <string name="open_db">Saved fests</string>
-    
+    <string name="sample_url">http://www.cse.iitb.ac.in/~amanmadaan/itsp/events/celloFest.xml</string>
 
 </resources>

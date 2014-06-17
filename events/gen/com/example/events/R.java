@@ -1246,6 +1246,7 @@ containing a value of this type.
         public static final int action_settings=0x7f0a000e;
         public static final int app_name=0x7f0a000d;
         public static final int open_db=0x7f0a0010;
+        public static final int sample_url=0x7f0a0011;
         public static final int scan_new=0x7f0a000f;
     }
     public static final class style {
