@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,7 +73,7 @@ public class MainActivity extends ActionBarActivity {
 		 String xml_url = getString(R.string.sample_url);
 		 System.out.println(xml_url);
 		 
-		 // testing to add a new fest.
+		/* // testing to add a new fest.
 		  int testId = 1;
 		  String testName = "cello" ;
 		  
@@ -84,11 +85,49 @@ public class MainActivity extends ActionBarActivity {
 		  db.addFest(f);
 		  
 		  ArrayList<Fest> list = new ArrayList<Fest>();
+		  System.out.println(list.size());
+		  list = db.getAllFests();
+		  System.out.println(list.size());
+		  
+		  f.setId(2);
+		  f.setName("TechFest");
+		  db.addFest(f);
 		  list = db.getAllFests();
 		  
-		  f = list.get(0);
-		  System.out.println(f.getName());
+		 
+		  System.out.println(list.size());
 		  
+		 */
+		 
+		 // testing event table.
+		 int id = 1;
+		 int fid = 1;
+		 String name = "intro";
+		 String manager = "Sandeep";
+		 String time = "june 23 6 PM" ;
+		 String venue = "vmcc";
+		 
+		 Event e  = new Event();
+		 e.setEventId(id);
+		 e.setFestId(fid);
+		 e.setManager(manager);
+		 e.setName(name);
+		 e.setTime(time);
+		 e.setVenue(venue);
+		 
+		 EventDatabaseManager db = new EventDatabaseManager(this);
+		 db.addEvent(e);
+		 
+		 ArrayList<Event> list = new ArrayList<Event>();
+		 list = db.getAllEvents();
+		 
+		 e = list.get(0);
+		 System.out.println(e.getVenue());
+		 System.out.println(list.size());
+		 
+		 
+		 
+		 
 		 
 		 
 	}

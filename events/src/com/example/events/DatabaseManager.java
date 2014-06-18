@@ -43,7 +43,7 @@ public class DatabaseManager extends SQLiteOpenHelper
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
         // Drop older books table if existed
-        db.execSQL("DROP TABLE IF EXISTS books");
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_FESTS);
  
         // create fresh books table
         this.onCreate(db);	
@@ -85,7 +85,7 @@ public class DatabaseManager extends SQLiteOpenHelper
 			} while (cursor.moveToNext());
 		}
 
-		// return Translation list
+		// return fest list
 		return FestList;
 	}
 	
