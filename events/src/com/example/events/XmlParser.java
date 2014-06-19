@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -27,67 +28,167 @@ public class XmlParser  extends android.app.Activity {
 	 * @throws URISyntaxException 
 	 * @throws ClientProtocolException 
 	 */
-	public Fest addFest(String url) throws XmlPullParserException, ClientProtocolException, URISyntaxException, IOException
+	public Fest getFest(String url) throws XmlPullParserException, ClientProtocolException, URISyntaxException, IOException
 	{
-		Log.d("xml parsing ","started parse function");
 		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();
         
-        Log.d("xml parsing ","no probs with basic ones");
         Fest newFest = new Fest();
         boolean festIdSet = false;
-        boolean festNameSet = false;
-        xpp.setInput(new InputStreamReader(getUrlData("http://www.cse.iitb.ac.in/~amanmadaan/itsp/events/celloFest.xml")));  
+        boolean festNameFound = false;
+        boolean festNameSet =false; // extra variable because events too have same tag called name.
+        xpp.setInput(new InputStreamReader(getUrlData(url)));  
 
-        Log.d("xml parsing ","parsing about to start.");
         try{
         	int eventType = xpp.getEventType();
-        while (eventType != XmlPullParser.END_DOCUMENT)
-        {
-        	if(eventType == XmlPullParser.START_DOCUMENT) 
+        	while (eventType != XmlPullParser.END_DOCUMENT)
         	{
-        		Log.d("xml parser","parsing started");
-        	} 
-        	else if(eventType == XmlPullParser.END_DOCUMENT)
-        	{
-        		Log.d("xml parser", "parsing done.");
+        		if(eventType == XmlPullParser.START_DOCUMENT) 
+        		{
+        			Log.d("xml parser","parsing started");
+        		} 
+        		else if(eventType == XmlPullParser.END_DOCUMENT)
+        		{
+        			Log.d("xml parser", "parsing done.");
+        		}
+        		else if(eventType == XmlPullParser.START_TAG)
+        		{
+        			String  fid = xpp.getName();
+        			if(fid.equalsIgnoreCase("festid"))festIdSet = true;
+        			if(fid.equalsIgnoreCase("name") && !festNameSet)festNameFound = true;
+        		}
+        		else if(eventType == XmlPullParser.END_TAG)
+        		{
+        			System.out.println("End tag "+xpp.getName());
+        		}
+        		else if(eventType == XmlPullParser.TEXT) {
+        			if(festIdSet)
+        			{
+        				System.out.println("id succesfully set.  : " + xpp.getText() );
+        				int a = Integer.parseInt(xpp.getText());
+        				newFest.setId(a);
+        				festIdSet =false;
+        			}
+        			if(festNameFound)
+        			{
+        				System.out.println("name successfully set.");
+        				newFest.setName(xpp.getText());
+        				festNameSet = true;
+        				festNameFound =false;
+        			}
+        		}
+        		eventType = xpp.next();
         	}
-        	else if(eventType == XmlPullParser.START_TAG)
-        	{
-        		String  fid = xpp.getName();
-        		if(fid == "festid")festIdSet = true;
-        		if(fid == "name")festNameSet = true;
-        		System.out.println("start tag "+fid);
-        	}
-        	else if(eventType == XmlPullParser.END_TAG)
-        	{
-             System.out.println("End tag "+xpp.getName());
-        	}
-        	else if(eventType == XmlPullParser.TEXT) {
-             System.out.println("Text "+xpp.getText());
-             if(festIdSet)
-             {
-            	 System.out.println("id succesfully set.");
-            	 newFest.setId(Integer.parseInt(xpp.getText()));
-             }
-             if(festNameSet)
-             {
-            	 System.out.println("name successfully set.");
-            	 newFest.setName(xpp.getText());
-             }
-         }
-         eventType = xpp.next();
-        } }catch(Exception e)
+        }catch(Exception e)
         {
         	Log.d("xml parsing " , "exception "+e);
         }
-        Log.d("xml parsing " , "returning properly.");
-        Log.d("xml parsing " , "name of fest :" + newFest.getName());
+        
         return newFest;
 	}
 	
+
+	/**
+	 * @param url
+	 * @return ArrayList of events corresponding to the xml contained in url. 
+	 * @throws XmlPullParserException 
+	 * @throws IOException 
+	 * @throws URISyntaxException 
+	 * @throws ClientProtocolException 
+	 */
+	public ArrayList<Event> getAllEvents(String url) throws XmlPullParserException, ClientProtocolException, URISyntaxException, IOException
+	{
 	
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			factory.setNamespaceAware(true);
+			XmlPullParser xpp = factory.newPullParser();
+	        xpp.setInput(new InputStreamReader(getUrlData(url)));  
+	        
+			ArrayList<Event> eventList = new ArrayList<Event>();
+			Event newEvent = new Event();
+			boolean festIdSet = false;
+			boolean eventIdSet = false;
+			boolean nameSet = false;
+			boolean managerSet =false;
+			boolean timeSet = false;
+			boolean venueSet = false;
+			try{
+				int eventType = xpp.getEventType();
+	        	while (eventType != XmlPullParser.END_DOCUMENT)
+	        	{
+	        		if(eventType == XmlPullParser.START_DOCUMENT) 
+	        		{
+	        			Log.d("xml parser","parsing started");
+	        		} 
+	        		else if(eventType == XmlPullParser.START_TAG)
+	        		{
+	        			String  fid = xpp.getName();
+	        			if(fid.equalsIgnoreCase("festid"))festIdSet = true;
+	        			if(fid.equalsIgnoreCase("name") )nameSet = true;
+	        			if(fid.equalsIgnoreCase("eventId"))eventIdSet = true;
+	        			if(fid.equalsIgnoreCase("time"))timeSet = true;
+	        			if(fid.equalsIgnoreCase("manager"))managerSet = true;
+	        			if(fid.equalsIgnoreCase("venue"))venueSet = true;
+	        		}
+	        		else if(eventType == XmlPullParser.END_TAG)
+	        		{
+	        			System.out.println("End tag "+xpp.getName());
+	        			if(xpp.getName().equalsIgnoreCase("event"))
+	        				{
+	        				eventList.add(newEvent);
+	        				Event e = new Event();
+	        				newEvent = e;
+	        				System.out.println("first element name is "+eventList.get(0).getName());
+	        				System.out.println("Adding event with name " + newEvent.getName());
+	        				}
+	        		}
+	        		else if(eventType == XmlPullParser.TEXT) {
+	        			if(festIdSet)
+	        			{
+	        				System.out.println("id succesfully set.  : " + xpp.getText() );
+	        				int a = Integer.parseInt(xpp.getText());
+	        				newEvent.setFestId(a);
+	        				festIdSet =false;
+	        			}
+	        			if(nameSet)
+	        			{
+	        				System.out.println("name successfully set.");
+	        				newEvent.setName(xpp.getText());
+	        				nameSet = false;
+	        			}
+	        			if(timeSet)
+	        			{
+	        				newEvent.setTime(xpp.getText());
+	        				timeSet =false;
+	        			}
+	        			if(venueSet)
+	        			{
+	        				newEvent.setVenue(xpp.getText());
+	        				venueSet =false;
+	        			}
+	        			if(managerSet)
+	        			{
+	        				newEvent.setManager(xpp.getText());
+	        				managerSet =false;
+	        			}
+	        			if(eventIdSet)
+	        			{
+	        				newEvent.setEventId(Integer.parseInt(xpp.getText()));
+	        				eventIdSet =false;
+	        			}
+	        		}
+	        		eventType = xpp.next();
+	        	}
+			
+			}catch(Exception e)
+			{
+				Log.d("xml parsing, events returning" , "Exception caught"+e);
+			}
+		
+			return eventList;
+	}
+        
 
 	public InputStream getUrlData(String url) 
 

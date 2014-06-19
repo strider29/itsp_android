@@ -71,35 +71,46 @@ public class EventDatabaseManager extends SQLiteOpenHelper
 	 */
 	public void addEvent(Event e) 
 	{
-		SQLiteDatabase db = this.getWritableDatabase();
-		ContentValues values = new ContentValues();
+		try{
+			SQLiteDatabase db = this.getWritableDatabase();
+			ContentValues values = new ContentValues();
 		
 		
-		/**
-		 * checking to see if the event is already added or not.
-		 */
-		ArrayList<Event> list = getAllEvents();
-		boolean isThere = false;
-		Event testEvent = new Event();
-		Iterator<Event> in = list.iterator();
-		while(in.hasNext())
-		{
-			testEvent = in.next();
-			if(testEvent.getEventId() == e.getEventId() && testEvent.getFestId() == e.getFestId())isThere = true;	
-		}
-		if(isThere)return;
+			/**
+			 * checking to see if the event is already added or not.
+			 */
+			ArrayList<Event> list = getAllEvents();
+			Event testEvent = new Event();
+			Iterator<Event> in = list.iterator();
+			while(in.hasNext())
+			{
+				testEvent = in.next();
+				if(testEvent.getEventId() == e.getEventId() && testEvent.getFestId() == e.getFestId())
+					{
+					// TODO : showing error.
+					return;	
+					}
+			}
+			
 		
-		values.put(KEY_FESTID, e.getFestId());
-		values.put(KEY_NAME, e.getName());
-		values.put(KEY_MANAGER, e.getManager());
-		values.put(KEY_TIME, e.getTime());
-		values.put(KEY_VENUE, e.getVenue());
-		Log.d("adding event" , "values row created.");
-		// Inserting Row
-		
-		db.insert(TABLE_EVENTS, null, values);
-		Log.d("adding event" , "event row added.");
-		db.close(); // Closing database connection
+			values.put(KEY_FESTID, e.getFestId());
+			values.put(KEY_NAME, e.getName());
+			values.put(KEY_MANAGER, e.getManager());
+			values.put(KEY_TIME, e.getTime());
+			values.put(KEY_VENUE, e.getVenue());
+			Log.d("adding event" , "values row created.");
+			// Inserting Row
+			if(!db.isOpen())
+			{
+				Log.wtf("adding events." , "db is not open.");
+			}
+			db.insert(TABLE_EVENTS, null, values);
+			Log.d("adding event" , "event row added.");
+			//db.close(); // Closing database connection
+			}catch(Exception ex)
+			{
+				Log.d("adding event" , "exception caught" +ex);
+			}
 	}
 	
 	/**
@@ -128,6 +139,7 @@ public class EventDatabaseManager extends SQLiteOpenHelper
 				EventList.add(e);
 			} while (cursor.moveToNext());
 		}
+		cursor.close();
 		db.close();
 		// return fest list
 		return EventList;

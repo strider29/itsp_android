@@ -19,6 +19,11 @@ private String festname;
 		festname = in.readString();
 		
 	}
+	
+	public int getId()
+	{
+		return id;
+	}
 	public String getName()
 	{
 		return festname;

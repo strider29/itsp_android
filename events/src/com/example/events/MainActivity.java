@@ -22,16 +22,14 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
-	public DatabaseManager db;
-	public EventDatabaseManager edb;
+
 	public final static String FESTS_KEY = "com.example.events.FESTS";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		db = new DatabaseManager(this);
-		edb = new EventDatabaseManager(this);
+
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
@@ -85,32 +83,7 @@ public class MainActivity extends ActionBarActivity {
 		 String xml_url = getString(R.string.sample_url);
 		 System.out.println(xml_url);
 		 
-		/* // testing to add a new fest.
-		  int testId = 1;
-		  String testName = "cello" ;
-		  
-		  Fest f = new Fest();
-		  f.setId(testId);
-		  f.setName(testName);
-		  
-		  DatabaseManager db = new DatabaseManager(this);
-		  db.addFest(f);
-		  
-		  ArrayList<Fest> list = new ArrayList<Fest>();
-		  System.out.println(list.size());
-		  list = db.getAllFests();
-		  System.out.println(list.size());
-		  
-		  f.setId(2);
-		  f.setName("TechFest");
-		  db.addFest(f);
-		  list = db.getAllFests();
-		  
-		 
-		  System.out.println(list.size());
-		  
-		 */
-		 
+
 		 // testing event table.
 		 int id = 1;
 		 int fid = 1;
@@ -127,30 +100,24 @@ public class MainActivity extends ActionBarActivity {
 		 e.setTime(time);
 		 e.setVenue(venue);
 		 
-		 EventDatabaseManager db = new EventDatabaseManager(this);
-		 db.addEvent(e);
+		 EventDatabaseManager edb = new EventDatabaseManager(this);
+		 edb.addEvent(e);
 		 
-		 ArrayList<Event> list = new ArrayList<Event>();
-		 list = db.getAllEvents();
-		 Iterator<Event> it = list.iterator();
-		 while(it.hasNext()) {
-			 e = it.next();
-			 System.out.println(e.getVenue());
-		 }
-		 e = list.get(0);
-		 list = db.eventsOfFestId(1);
-		 e=list.get(0);
-		 System.out.println(e.getTime());
+
 		 
 		 XmlParser p = new XmlParser();
 		 Fest testFest = new Fest();
-		 Log.d("test","fest created.");
-		 testFest = p.addFest(xml_url);
-		 Log.d("main activity" , "fest added succesfully");
+		 testFest = p.getFest(xml_url);
+		 Log.d("main activity" , "fest added succesfully : " + testFest.getId() + " "+ testFest.getName());
 		 
-//		 System.out.println(testFest.getName());
+		 ArrayList<Event> eventList = new ArrayList<Event>();
+		 eventList = p.getAllEvents(xml_url);
+		 System.out.println("size of eventlist :"+eventList.size());
 		 
-		 
+		 Event ev = new Event();
+		 ev = eventList.get(0);
+		 System.out.println(ev.getName());
+
 		 
 		 
 	}
@@ -162,6 +129,7 @@ public class MainActivity extends ActionBarActivity {
 		 Fest testFest = new Fest();
 		 testFest.setId(1);
 		 testFest.setName("mi");
+		 DatabaseManager db = new DatabaseManager(this);
 		 db.addFest(testFest);
 		 
 		 ArrayList<Fest> allFests = db.getAllFests();
@@ -172,6 +140,7 @@ public class MainActivity extends ActionBarActivity {
 		 /**
 		  * calling FestsActivity.
 		  */
+		 System.out.println(allFests.size());
 		  Intent intent = new Intent(this, FestsActivity.class);
 		  intent.putParcelableArrayListExtra(FESTS_KEY, allFests);
 		  startActivity(intent);

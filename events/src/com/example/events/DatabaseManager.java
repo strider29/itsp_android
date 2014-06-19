@@ -1,12 +1,14 @@
 package com.example.events;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 
 public class DatabaseManager extends SQLiteOpenHelper
@@ -54,6 +56,23 @@ public class DatabaseManager extends SQLiteOpenHelper
 	 */
 	public void addFest(Fest f) 
 	{
+		/**
+		 * checking for repetition.
+		 */
+		boolean added =false;
+		Fest testFest = new Fest();
+		ArrayList<Fest> festList = new ArrayList<Fest>();
+		festList = getAllFests();
+		Iterator festiter = festList.iterator();
+		while(festiter.hasNext())
+		{
+			testFest = (Fest) festiter.next();
+			Log.d("fest testing" , "name of fests :" + testFest.getName()+f.getName());
+			if(testFest.getId() == f.getId() && testFest.getName().equalsIgnoreCase(f.getName())){added =true;Log.d("fest adding" , "duplicate found.");}
+		}
+		
+		if(added)return;
+		
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(KEY_NAME, f.getName()); 
@@ -84,7 +103,7 @@ public class DatabaseManager extends SQLiteOpenHelper
 				FestList.add(f);
 			} while (cursor.moveToNext());
 		}
-		
+		cursor.close();
 		db.close();
 
 		// return fest list
