@@ -1,7 +1,14 @@
 package com.example.events;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import org.apache.http.client.ClientProtocolException;
+import org.xmlpull.v1.XmlPullParserException;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -15,11 +22,16 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
+	public DatabaseManager db;
+	public EventDatabaseManager edb;
+	public final static String FESTS_KEY = "com.example.events.FESTS";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		db = new DatabaseManager(this);
+		edb = new EventDatabaseManager(this);
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
@@ -63,7 +75,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 	
-	public void addNewEvent (View view)
+	public void addNewEvent (View view) throws ClientProtocolException, XmlPullParserException, URISyntaxException, IOException
 	{
 		// snippet to scan new qr code.
 		 Toast.makeText(this,"so you want to scan qr code ?", Toast.LENGTH_SHORT).show(); // just to check functionality.
@@ -120,12 +132,23 @@ public class MainActivity extends ActionBarActivity {
 		 
 		 ArrayList<Event> list = new ArrayList<Event>();
 		 list = db.getAllEvents();
-		 
+		 Iterator<Event> it = list.iterator();
+		 while(it.hasNext()) {
+			 e = it.next();
+			 System.out.println(e.getVenue());
+		 }
 		 e = list.get(0);
-		 System.out.println(e.getVenue());
-		 System.out.println(list.size());
+		 list = db.eventsOfFestId(1);
+		 e=list.get(0);
+		 System.out.println(e.getTime());
 		 
+		 XmlParser p = new XmlParser();
+		 Fest testFest = new Fest();
+		 Log.d("test","fest created.");
+		 testFest = p.addFest(xml_url);
+		 Log.d("main activity" , "fest added succesfully");
 		 
+//		 System.out.println(testFest.getName());
 		 
 		 
 		 
@@ -136,7 +159,24 @@ public class MainActivity extends ActionBarActivity {
 	{
 		// calling new activity to show fests.
 		
-		 Toast.makeText(this, "i won't open fests for you.get lost.", Toast.LENGTH_SHORT).show(); // just to check functionality.
+		 Fest testFest = new Fest();
+		 testFest.setId(1);
+		 testFest.setName("mi");
+		 db.addFest(testFest);
+		 
+		 ArrayList<Fest> allFests = db.getAllFests();
+
+		 // now to convert array list to list view.
+		 
+		 
+		 /**
+		  * calling FestsActivity.
+		  */
+		  Intent intent = new Intent(this, FestsActivity.class);
+		  intent.putParcelableArrayListExtra(FESTS_KEY, allFests);
+		  startActivity(intent);
+		  
+
 	}
 
 }

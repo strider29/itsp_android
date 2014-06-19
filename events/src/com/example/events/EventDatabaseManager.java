@@ -1,6 +1,7 @@
 package com.example.events;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -72,6 +73,22 @@ public class EventDatabaseManager extends SQLiteOpenHelper
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
+		
+		
+		/**
+		 * checking to see if the event is already added or not.
+		 */
+		ArrayList<Event> list = getAllEvents();
+		boolean isThere = false;
+		Event testEvent = new Event();
+		Iterator<Event> in = list.iterator();
+		while(in.hasNext())
+		{
+			testEvent = in.next();
+			if(testEvent.getEventId() == e.getEventId() && testEvent.getFestId() == e.getFestId())isThere = true;	
+		}
+		if(isThere)return;
+		
 		values.put(KEY_FESTID, e.getFestId());
 		values.put(KEY_NAME, e.getName());
 		values.put(KEY_MANAGER, e.getManager());
@@ -79,6 +96,7 @@ public class EventDatabaseManager extends SQLiteOpenHelper
 		values.put(KEY_VENUE, e.getVenue());
 		Log.d("adding event" , "values row created.");
 		// Inserting Row
+		
 		db.insert(TABLE_EVENTS, null, values);
 		Log.d("adding event" , "event row added.");
 		db.close(); // Closing database connection
@@ -110,10 +128,36 @@ public class EventDatabaseManager extends SQLiteOpenHelper
 				EventList.add(e);
 			} while (cursor.moveToNext());
 		}
-
+		db.close();
 		// return fest list
 		return EventList;
 	}
 	
+	// function to return all Events corresponding to a fest id.
+	ArrayList<Event> eventsOfFestId(int fid)
+	{
+		ArrayList<Event> EventList = new ArrayList<Event> ();
+		String selectQuery = "SELECT * FROM " + TABLE_EVENTS;
+		
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				Event e = new Event();
+				e.setEventId(Integer.parseInt(cursor.getString(0)));
+				e.setFestId(Integer.parseInt(cursor.getString(FESTID_INDEX)));
+				e.setName(cursor.getString(NAME_INDEX));
+				e.setManager(cursor.getString(MANAGER_INDEX));
+				e.setTime(cursor.getString(TIME_INDEX));
+				e.setVenue(cursor.getString(VENUE_INDEX));
+				// Adding Event to list
+				if(e.getFestId() == fid)EventList.add(e);
+			} while (cursor.moveToNext());
+		}
+		
+		return EventList;
+	}
 	
 }

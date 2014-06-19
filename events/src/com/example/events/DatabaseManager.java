@@ -84,6 +84,8 @@ public class DatabaseManager extends SQLiteOpenHelper
 				FestList.add(f);
 			} while (cursor.moveToNext());
 		}
+		
+		db.close();
 
 		// return fest list
 		return FestList;
