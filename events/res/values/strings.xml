@@ -8,5 +8,6 @@
     <string name="sample_url">http://www.cse.iitb.ac.in/~amanmadaan/itsp/cf.xml</string>
     <string name="title_activity_fests">Fests</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_camera_test">Scanning QR Code</string>
 
 </resources>

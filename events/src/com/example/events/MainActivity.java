@@ -84,6 +84,10 @@ public class MainActivity extends ActionBarActivity {
 		 System.out.println(xml_url);
 		 
 
+		 // testing zbar activity.
+		  Intent intent = new Intent(this, CameraTestActivity.class);
+		  //intent.putParcelableArrayListExtra(FESTS_KEY, allFests);
+		  startActivity(intent);
 		 // testing event table.
 		 int id = 1;
 		 int fid = 1;
