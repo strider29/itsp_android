@@ -16,10 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class FestsActivity extends ActionBarActivity {
 	
 	private ListView lv;
+	private String s;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,7 @@ public class FestsActivity extends ActionBarActivity {
 			Log.d("fest names :" , " "+f.getName());
 		}
 		
-		// setting list view with festNames string list.
+	/*	// setting list view with festNames string list.
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this, 
                 R.layout.activity_fests,
@@ -64,8 +66,12 @@ public class FestsActivity extends ActionBarActivity {
         	Log.d("setting adapter" , "exception caught" + e);
         }
         Log.d("list view", "adapter linked.");
+        */
+		s = Integer.toString(festNames.size());
+		if(festNames.size() > 0)s = festNames.get(0);
 	}
 
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -103,4 +109,11 @@ public class FestsActivity extends ActionBarActivity {
 		}
 	}
 
+	public void onClick(View view)
+	{
+		TextView  t = (TextView) findViewById(R.id.textView1);
+		t.setText(s);
+		//MainActivity act = new MainActivity();
+  //  	addFestFromUrl("http://www.cse.iitb.ac.in/~amanmadaan/itsp/celloFest.xml");
+	}
 }

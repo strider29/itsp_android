@@ -3,7 +3,6 @@ package com.example.events;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.http.client.ClientProtocolException;
 import org.xmlpull.v1.XmlPullParserException;
@@ -18,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
@@ -87,29 +87,11 @@ public class MainActivity extends ActionBarActivity {
 		 // testing zbar activity.
 		  Intent intent = new Intent(this, CameraTestActivity.class);
 		  //intent.putParcelableArrayListExtra(FESTS_KEY, allFests);
-		  startActivity(intent);
+		  startActivityForResult(intent,1);
 		 // testing event table.
-		 int id = 1;
-		 int fid = 1;
-		 String name = "intro";
-		 String manager = "Sandeep";
-		 String time = "june 23 6 PM" ;
-		 String venue = "vmcc";
+		
 		 
-		 Event e  = new Event();
-		 e.setEventId(id);
-		 e.setFestId(fid);
-		 e.setManager(manager);
-		 e.setName(name);
-		 e.setTime(time);
-		 e.setVenue(venue);
-		 
-		 EventDatabaseManager edb = new EventDatabaseManager(this);
-		 edb.addEvent(e);
-		 
-
-		 
-		 XmlParser p = new XmlParser();
+		 /*XmlParser p = new XmlParser();
 		 Fest testFest = new Fest();
 		 testFest = p.getFest(xml_url);
 		 Log.d("main activity" , "fest added succesfully : " + testFest.getId() + " "+ testFest.getName());
@@ -121,21 +103,48 @@ public class MainActivity extends ActionBarActivity {
 		 Event ev = new Event();
 		 ev = eventList.get(0);
 		 System.out.println(ev.getName());
-
-		 
+		*/
+		 Log.d("main function ", "found value.");
 		 
 	}
 	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+	    if (requestCode == 1) {
+	        if(resultCode == RESULT_OK){
+	            String result=data.getStringExtra("result");
+	            addFestFromUrl(result);
+	        }
+	        if (resultCode == RESULT_CANCELED) {
+	            //Write your code if there's no result
+	        }
+	    }
+	}
+	/**
+	 * function to link qr and xml parser.
+	 * @param url obtained from CameraTestActity
+	 */
+	public  void addFestFromUrl(String url)
+	{
+		Fest f = new Fest();
+		try{
+			XmlParser myParser = new XmlParser();
+			f = myParser.getFest(url);
+		}catch(Exception ex)
+		{
+			Log.d("adding fest from url function " , "Exception :"+ ex);
+		}
+		System.out.println(f.getName());
+		DatabaseManager db = new DatabaseManager(this);
+		db.addFest(f);
+		
+	}
 	public void openFests(View view)
 	{
 		// calling new activity to show fests.
 		
-		 Fest testFest = new Fest();
-		 testFest.setId(1);
-		 testFest.setName("mi");
+
 		 DatabaseManager db = new DatabaseManager(this);
-		 db.addFest(testFest);
-		 
 		 ArrayList<Fest> allFests = db.getAllFests();
 
 		 // now to convert array list to list view.
@@ -148,7 +157,6 @@ public class MainActivity extends ActionBarActivity {
 		  Intent intent = new Intent(this, FestsActivity.class);
 		  intent.putParcelableArrayListExtra(FESTS_KEY, allFests);
 		  startActivity(intent);
-		  
 
 	}
 

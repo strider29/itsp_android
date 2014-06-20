@@ -6,35 +6,27 @@
  */
 package com.example.events;
 
-import com.example.events.CameraPreview;
-
+import net.sourceforge.zbar.Config;
+import net.sourceforge.zbar.Image;
+/* Import ZBar Class files */
+import net.sourceforge.zbar.ImageScanner;
+import net.sourceforge.zbar.Symbol;
+import net.sourceforge.zbar.SymbolSet;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
+import android.hardware.Camera.PreviewCallback;
+import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
-import android.widget.FrameLayout;
 import android.widget.Button;
-
-import android.hardware.Camera;
-import android.hardware.Camera.PreviewCallback;
-import android.hardware.Camera.AutoFocusCallback;
-import android.hardware.Camera.Parameters;
-import android.hardware.Camera.Size;
-
+import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.graphics.ImageFormat;
-
-/* Import ZBar Class files */
-import net.sourceforge.zbar.ImageScanner;
-import net.sourceforge.zbar.Image;
-import net.sourceforge.zbar.Symbol;
-import net.sourceforge.zbar.SymbolSet;
-import net.sourceforge.zbar.Config;
 
 public class CameraTestActivity extends Activity
 {
@@ -140,7 +132,15 @@ public class CameraTestActivity extends Activity
                     
                     SymbolSet syms = scanner.getResults();
                     for (Symbol sym : syms) {
-                        scanText.setText("barcode result " + sym.getData());
+                    	/**
+                    	 * result obtained.
+                    	 */
+                    	scanText.setText("barcode result " + sym.getData());
+                    	Intent returnIntent = new Intent();
+                    	returnIntent.putExtra("result",sym.getData());
+                    	setResult(RESULT_OK,returnIntent);
+                    	finish();
+                       
                         barcodeScanned = true;
                     }
                 }

@@ -9,17 +9,19 @@
     tools:context="com.example.events.FestsActivity$PlaceholderFragment" >
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
 
-    <ListView
-        android:id="@+id/fests"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
-        >
-    </ListView>
+        android:layout_marginTop="156dp"
+        android:text="Button"
+        android:onClick="onClick" />
 
 </RelativeLayout>
