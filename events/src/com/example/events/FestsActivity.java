@@ -67,8 +67,12 @@ public class FestsActivity extends ActionBarActivity {
         }
         Log.d("list view", "adapter linked.");
         */
-		s = Integer.toString(festNames.size());
-		if(festNames.size() > 0)s = festNames.get(0);
+		EventDatabaseManager edb = new EventDatabaseManager(this);
+		ArrayList<Event> eventList = new ArrayList<Event>();
+		eventList = edb.getAllEvents();
+		s = Integer.toString(festNames.size()*10+eventList.size());
+		if(festNames.size() > 0)s = s+festNames.get(0);
+		if(eventList.size() >0)s = s + eventList.get(0).getVenue();
 	}
 
 	

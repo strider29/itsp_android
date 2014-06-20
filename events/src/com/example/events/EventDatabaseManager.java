@@ -102,15 +102,17 @@ public class EventDatabaseManager extends SQLiteOpenHelper
 			// Inserting Row
 			if(!db.isOpen())
 			{
-				Log.wtf("adding events." , "db is not open.");
+				       db = this.getWritableDatabase();
+				     
 			}
 			db.insert(TABLE_EVENTS, null, values);
 			Log.d("adding event" , "event row added.");
-			//db.close(); // Closing database connection
+			db.close(); // Closing database connection
 			}catch(Exception ex)
 			{
 				Log.d("adding event" , "exception caught" +ex);
 			}
+			
 	}
 	
 	/**
