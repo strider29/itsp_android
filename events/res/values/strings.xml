@@ -9,5 +9,7 @@
     <string name="title_activity_fests">Fests</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_camera_test">Scanning QR Code</string>
+    <string name="title_activity_event">Events List</string>
+    <string name="title_activity_event_display">EventDisplayActivity</string>
 
 </resources>

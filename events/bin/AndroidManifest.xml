@@ -23,12 +23,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.events.FestsActivity"
+            android:name="com.example.events.festhandler.FestsActivity"
             android:label="@string/title_activity_fests" >
         </activity>
         <activity
-            android:name="com.example.events.CameraTestActivity"
+            android:name="com.example.events.qrhandler.CameraTestActivity"
             android:label="@string/title_activity_camera_test" >
+        </activity>
+        <activity
+            android:name="com.example.events.EventActivity"
+            android:label="@string/title_activity_event" >
+        </activity>
+        <activity
+            android:name="com.example.events.EventDisplayActivity"
+            android:label="@string/title_activity_event_display" >
         </activity>
     </application>
 

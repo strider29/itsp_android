@@ -18,8 +18,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.events.eventhandler.Event;
+import com.example.events.eventhandler.EventDatabaseManager;
+import com.example.events.festhandler.DatabaseManager;
+import com.example.events.festhandler.Fest;
+import com.example.events.festhandler.FestsActivity;
+import com.example.events.qrhandler.CameraTestActivity;
+import com.example.events.xmlparser.XmlParser;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -47,9 +54,6 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -77,12 +81,11 @@ public class MainActivity extends ActionBarActivity {
 	public void addNewEvent (View view) throws ClientProtocolException, XmlPullParserException, URISyntaxException, IOException
 	{
 		// testing on Emulator for database testing.
-		addFestFromUrl("http://www.cse.iitb.ac.in/~amanmadaan/itsp/cf.xml");
-		// snippet to scan new qr code.
-		/*
+		//addFestFromUrl("http://www.cse.iitb.ac.in/~amanmadaan/itsp/cf.xml");
+		 //original code :
 		 Toast.makeText(this,"Point your Camera at QR Code", Toast.LENGTH_SHORT).show(); 
 		 Intent intent = new Intent(this, CameraTestActivity.class);
-		 startActivityForResult(intent,1);		 */
+		 startActivityForResult(intent,1);		 
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
@@ -105,23 +108,23 @@ public class MainActivity extends ActionBarActivity {
 	{
 		Fest f = new Fest();
 		ArrayList<Event> eventList = new ArrayList<Event>();
+		
 		try{
 			//TODO : Check Internet Connection. Accordingly display errors.
 			XmlParser myParser = new XmlParser();
 			f = myParser.getFest(url);
 			eventList = myParser.getAllEvents(url);
-			Log.d("adding events. " , "number of events added :"+eventList.size());
 		}catch(Exception ex)
 		{
-			Log.d("adding fest from url function " , "Exception :"+ ex);
+			Log.d("xml parsing : " , "Exception :"+ ex);
 		}
-		System.out.println(f.getName());
+		
 		try{
 			DatabaseManager db = new DatabaseManager(this);
 			db.addFest(f);
 			EventDatabaseManager edb  = new EventDatabaseManager(this);
 			Event e = new Event();
-			Iterator it = eventList.iterator();
+			Iterator<Event> it = eventList.iterator();
 			while(it.hasNext())
 			{
 				e = (Event) it.next();
@@ -132,17 +135,16 @@ public class MainActivity extends ActionBarActivity {
 			Log.d("adding fest and events to database " , "Exception "+e);
 		}
 	}
+	
+	/**
+	 * function to display list of events.
+	 * @param view
+	 */
 	public void openFests(View view)
 	{
-		// calling new activity to show fests.
-		
-
-		 DatabaseManager db = new DatabaseManager(this);
-		 ArrayList<Fest> allFests = db.getAllFests();
-		 /**
-		  * calling FestsActivity.
-		  */
-		  Intent intent = new Intent(this, FestsActivity.class);
+		  DatabaseManager db  = new DatabaseManager(this);
+		  ArrayList<Fest> allFests = db.getAllFests();
+		  Intent intent = new Intent(this, FestsActivity.class);   // calling FestActivity class.
 		  intent.putParcelableArrayListExtra(FESTS_KEY, allFests);
 		  startActivity(intent);
 
