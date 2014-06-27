@@ -3,29 +3,24 @@ package com.example.eventsiitb.eventhandler;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
-
-
-
-
-import com.example.eventsiitb.R;
-import com.example.eventsiitb.R.id;
-import com.example.eventsiitb.R.layout;
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.example.eventsiitb.R;
 
 public class EventActivity extends Activity {
 
+	private Context context = this;
 	private int fId;
 	private ArrayList<Event> allEvents = new ArrayList<Event>();
 	@Override
@@ -67,6 +62,52 @@ public class EventActivity extends Activity {
 			startActivity(intent);
 		}		
 		});
+	
+	lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+		EventDatabaseManager edb = new EventDatabaseManager(context);
+		int position = 0;
+        public boolean onItemLongClick(AdapterView<?> arg0, View v,
+                int index, long arg3) {
+
+             position = index; 
+             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+     				context);
+      
+     			// set title
+     			alertDialogBuilder.setTitle("Delete Event ");
+      
+     			// set dialog message
+     			alertDialogBuilder
+     				.setMessage("Are you sure ?")
+     				.setCancelable(false)
+     				.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+     					public void onClick(DialogInterface dialog,int id) {
+     						// Deleting fest.
+     						edb.deleteEvent(position+1);
+     						finish();
+     					}
+     				  })
+     				.setNegativeButton("No",new DialogInterface.OnClickListener() {
+     					public void onClick(DialogInterface dialog,int id) {
+     						// if this button is clicked, just close
+     						// the dialog box and do nothing
+     						dialog.cancel();
+     					}
+     				});
+      
+     				// create alert dialog
+     				AlertDialog alertDialog = alertDialogBuilder.create();
+      
+     				// show it
+     				alertDialog.show();
+     				
+     				
+            return true;
+        }
+	}); 
+
+
 
 	
 	}

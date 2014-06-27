@@ -7,8 +7,6 @@
 package com.example.eventsiitb.qrscanner;
 
 import com.example.eventsiitb.R;
-import com.example.eventsiitb.R.id;
-import com.example.eventsiitb.R.layout;
 
 import net.sourceforge.zbar.Config;
 import net.sourceforge.zbar.Image;
@@ -26,8 +24,6 @@ import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -43,7 +39,7 @@ public class CameraTestActivity extends Activity
 
     ImageScanner scanner;
 
-    private boolean barcodeScanned = false;
+
     private boolean previewing = true;
 
     static {
@@ -72,20 +68,6 @@ public class CameraTestActivity extends Activity
 
         scanText = (TextView)findViewById(R.id.scanText);
 
-        scanButton = (Button)findViewById(R.id.ScanButton);
-
-        scanButton.setOnClickListener(new OnClickListener() {
-                public void onClick(View v) {
-                    if (barcodeScanned) {
-                        barcodeScanned = false;
-                        scanText.setText("Scanning...");
-                        mCamera.setPreviewCallback(previewCb);
-                        mCamera.startPreview();
-                        previewing = true;
-                        mCamera.autoFocus(autoFocusCB);
-                    }
-                }
-            });
     }
 
     public void onPause() {
@@ -139,13 +121,13 @@ public class CameraTestActivity extends Activity
                     	/**
                     	 * result obtained.
                     	 */
-                    	scanText.setText("barcode result " + sym.getData());
+                    	scanText.setText("QR found :) ");
                     	Intent returnIntent = new Intent();
                     	returnIntent.putExtra("result",sym.getData());
                     	setResult(RESULT_OK,returnIntent);
                     	finish();
                        
-                        barcodeScanned = true;
+                        
                     }
                 }
             }

@@ -139,7 +139,7 @@ public class DatabaseManager extends SQLiteOpenHelper
 	}
 	
 	/**
-	 * function to delete fest given fest id.
+	 * function to delete fest given row id.
 	 */
 	void deleteFest (int rowId)
 	{

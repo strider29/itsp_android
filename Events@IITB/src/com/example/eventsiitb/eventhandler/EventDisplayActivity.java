@@ -3,16 +3,11 @@ package com.example.eventsiitb.eventhandler;
 
 
 import com.example.eventsiitb.R;
-
-
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 public class EventDisplayActivity extends Activity {
 

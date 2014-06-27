@@ -213,4 +213,14 @@ public class EventDatabaseManager extends SQLiteOpenHelper
 		return e;
 	}
 	
+	
+	/**
+	 * function to delete event given row position
+	 */
+	void deleteEvent (int rowId)
+	{
+		String where = KEY_ID + "=" + rowId;
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_EVENTS, where, null);
+	}
 }
