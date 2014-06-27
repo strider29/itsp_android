@@ -91,7 +91,7 @@ public class EventDatabaseManager extends SQLiteOpenHelper
 				testEvent = in.next();
 				if(testEvent.getEventId() == e.getEventId() && testEvent.getFestId() == e.getFestId())
 					{
-					// TODO : showing error.
+					Log.d("adding event to the database. " , "Duplicate found.");
 					return;	
 					}
 			}
@@ -181,7 +181,8 @@ public class EventDatabaseManager extends SQLiteOpenHelper
 				if(e.getFestId() == fid)EventList.add(e);
 			} while (cursor.moveToNext());
 		}
-		
+		cursor.close();
+		db.close();
 		return EventList;
 	}
 	
@@ -206,7 +207,7 @@ public class EventDatabaseManager extends SQLiteOpenHelper
 				e.setLocalImage(cursor.getString(LOCALURL_INDEX));
 				// Adding Event to list
 				Log.d("adding events of fest id :" , e.getName() + "  : "+e.getFestId());
-				if(e.getName().equalsIgnoreCase(name))return e;
+				if(e.getName().equalsIgnoreCase(name)){cursor.close();db.close();return e;}
 			} while (cursor.moveToNext());
 		}
 		return e;

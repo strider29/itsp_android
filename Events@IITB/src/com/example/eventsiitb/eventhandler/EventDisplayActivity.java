@@ -3,8 +3,7 @@ package com.example.eventsiitb.eventhandler;
 
 
 import com.example.eventsiitb.R;
-import com.example.eventsiitb.R.id;
-import com.example.eventsiitb.R.layout;
+
 
 import android.app.Activity;
 import android.content.Intent;
@@ -30,7 +29,6 @@ public class EventDisplayActivity extends Activity {
 		Event e = new Event();
 		e = edb.eventFromName(eventName);
 		String eventDisplay = e.getName()+"\n"+"Time : "+e.getTime()+"\n"+ "Place :" + e.getVenue() + "\n"+e.getPosterUrl();
-		Toast.makeText(this,eventDisplay, Toast.LENGTH_SHORT).show(); 
 		t.setText(eventDisplay);
 	}
 }

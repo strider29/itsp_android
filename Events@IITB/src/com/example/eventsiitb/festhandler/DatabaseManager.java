@@ -21,8 +21,10 @@ public class DatabaseManager extends SQLiteOpenHelper
 	  // column names.
 	  private static final String KEY_ID = "id";
 	  private static final String KEY_NAME = "title";
+	  private static final String KEY_FESTID = "festid";
 	  
 	  private static final int NAME_INDEX = 1;
+	  private static final int FESTID_INDEX = 2;
 	  
 	public DatabaseManager(Context context)
 	{
@@ -34,7 +36,7 @@ public class DatabaseManager extends SQLiteOpenHelper
 	public void onCreate(SQLiteDatabase database) 
 	{
 		String CREATE_FESTS_TABLE = "CREATE TABLE " + TABLE_FESTS
-				+ "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT )";
+				+ "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_NAME + " TEXT  , "+KEY_FESTID+" INTEGER )";
 	 
 		 database.execSQL(CREATE_FESTS_TABLE);
 		      
@@ -75,7 +77,8 @@ public class DatabaseManager extends SQLiteOpenHelper
 		
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put(KEY_NAME, f.getName()); 
+		values.put(KEY_NAME, f.getName());
+		values.put(KEY_FESTID, f.getId());
 		// Inserting Row
 		db.insert(TABLE_FESTS, null, values);
 		db.close(); // Closing database connection
@@ -97,8 +100,8 @@ public class DatabaseManager extends SQLiteOpenHelper
 		if (cursor.moveToFirst()) {
 			do {
 				Fest f = new Fest();
-				f.setId(Integer.parseInt(cursor.getString(0)));
 				f.setName(cursor.getString(NAME_INDEX));
+				f.setId(Integer.parseInt(cursor.getString(FESTID_INDEX)));
 				// Adding Fest to list
 				FestList.add(f);
 			} while (cursor.moveToNext());
@@ -123,16 +126,25 @@ public class DatabaseManager extends SQLiteOpenHelper
 		if (cursor.moveToFirst()) {
 			do {
 				Fest f = new Fest();
-				f.setId(Integer.parseInt(cursor.getString(0)));
 				f.setName(cursor.getString(NAME_INDEX));
+				f.setId(Integer.parseInt(cursor.getString(FESTID_INDEX)));
 				// Adding Fest to list
-				if(f.getName().equalsIgnoreCase(fName))return f.getId();
+				if(f.getName().equalsIgnoreCase(fName)){cursor.close();db.close();return f.getId();}
 			} while (cursor.moveToNext());
 		}
-		cursor.close();
+		
 		db.close();
 		return -1;
 
 	}
 	
+	/**
+	 * function to delete fest given fest id.
+	 */
+	void deleteFest (int rowId)
+	{
+		String where = KEY_ID + "=" + rowId;
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_FESTS, where, null);
+	}
 }

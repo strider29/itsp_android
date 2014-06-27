@@ -41,11 +41,11 @@ public class MainActivity extends Activity {
 public void addNewEvent (View view) throws ClientProtocolException, XmlPullParserException, URISyntaxException, IOException
 	{
 		// testing on Emulator for database testing.
-		//addFestFromUrl("http://www.cse.iitb.ac.in/~amanmadaan/itsp/cf.xml");
-		 //original code :
+		addFestFromUrl("http://www.cse.iitb.ac.in/~amanmadaan/itsp/celloFest.xml");
+		/* original code :
 		 Toast.makeText(this,"Point your Camera at QR Code", Toast.LENGTH_SHORT).show(); 
 		 Intent intent = new Intent(this, CameraTestActivity.class);
-		 startActivityForResult(intent,1);		 
+		 startActivityForResult(intent,1);		 */
 	}
 	
 protected void onActivityResult(int requestCode, int resultCode, Intent data) 
@@ -57,7 +57,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data)
             addFestFromUrl(result);
         }
         if (resultCode == RESULT_CANCELED) {
-          // TODO  : Displaying error. Some problem with QR Code.
+        	Toast.makeText(this,"Oops!!The QR code doesn't seem to be correct.", Toast.LENGTH_SHORT).show(); 
         }
     }
 }
@@ -117,7 +117,6 @@ public void openFests(View view)
 	  Intent intent = new Intent(this, FestsActivity.class);   // calling FestActivity class.
 	  intent.putParcelableArrayListExtra(FESTS_KEY, allFests);
 	  startActivity(intent);
-
 }	
 
 }
